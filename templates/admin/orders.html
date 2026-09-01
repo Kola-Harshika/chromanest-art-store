@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Customer Orders — CHROMANEST Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background: #F6F4F1;">
+
+  <header style="background: #221B24; color: #FAF7F2; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="/admin" style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #FAF7F2; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+          <span>CHROMANEST</span>
+          <span style="font-family: var(--font-sans); font-size: 0.75rem; background: var(--accent-lavender); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600;">ADMIN</span>
+        </a>
+        <nav style="display: flex; gap: 1rem;">
+          <a href="/admin" style="color: #D1CCD4; text-decoration: none; font-size: 0.95rem;">Overview</a>
+          <a href="/admin/products" style="color: #D1CCD4; text-decoration: none; font-size: 0.95rem;">Products</a>
+          <a href="/admin/orders" style="color: #FAF7F2; font-weight: 600; text-decoration: none; font-size: 0.95rem; border-bottom: 2px solid var(--accent-mauve); padding-bottom: 2px;">Orders</a>
+        </nav>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/" target="_blank" style="color: #D1CCD4; font-size: 0.9rem; text-decoration: none;">
+          <i class="fas fa-external-link-alt"></i> Storefront
+        </a>
+        <a href="/logout" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.1); color: #FAF7F2; border-color: rgba(255,255,255,0.2);">
+          Logout
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-family: var(--font-serif); font-weight: 600;">Customer Orders Fulfillment</h1>
+      <p style="color: var(--text-secondary);">View ordered artworks, shipping destinations, and update fulfillment statuses.</p>
+    </div>
+
+    {% if orders and orders|length > 0 %}
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        {% for order in orders %}
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm);">
+            
+            <div style="background: var(--bg-secondary); padding: 1.2rem 1.8rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Order ID</span>
+                <h3 style="font-size: 1.15rem; font-weight: 700;">{{ order['order_number'] }}</h3>
+              </div>
+
+              <div>
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Customer</span>
+                <p style="font-weight: 600; margin: 0;">{{ order['customer_name'] }}</p>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">{{ order['customer_email'] }} • {{ order['customer_phone'] }}</span>
+              </div>
+
+              <div>
+                <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Date & Total</span>
+                <p style="margin: 0; font-weight: 700;">${{ "%.2f"|format(order['total_amount']) }}</p>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">{{ order['created_at'][:10] }}</span>
+              </div>
+
+              <!-- Status Update Form -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <form action="/admin/orders/{{ order['id'] }}/status" method="POST" style="display: flex; align-items: center; gap: 8px;">
+                  <select name="status" class="form-control" style="padding: 0.4rem 0.8rem; font-size: 0.88rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    {% for st in ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'] %}
+                      <option value="{{ st }}" {% if order['status'] == st %}selected{% endif %}>{{ st }}</option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit" class="btn btn-secondary btn-sm" style="padding: 0.4rem 0.8rem;">
+                    Update
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Items and address -->
+            <div style="padding: 1.5rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+              <div>
+                <h4 style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.8rem;">Artworks ({{ order['items']|length }} items)</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                  {% for item in order['items'] %}
+                    <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(142,124,147,0.08); padding-bottom: 0.6rem;">
+                      <img src="{{ item['image'] }}" alt="{{ item['title'] }}" style="width: 45px; height: 45px; border-radius: 4px; object-fit: cover;">
+                      <div style="flex: 1;">
+                        <span style="font-weight: 600;">{{ item['title'] }}</span>
+                        <span style="font-size: 0.82rem; color: var(--text-muted); display: block;">Qty: {{ item['quantity'] }} × ${{ "%.2f"|format(item['price']) }}</span>
+                      </div>
+                      <div style="font-weight: 600;">${{ "%.2f"|format(item['subtotal']) }}</div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.2rem;">
+                <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.6rem;">Shipping Address</h4>
+                <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-primary);">
+                  <strong>{{ order['customer_name'] }}</strong><br>
+                  {{ order['shipping_address'] }}<br>
+                  {{ order['city'] }}, {{ order['postal_code'] }}
+                </p>
+                <div style="margin-top: 0.8rem; font-size: 0.82rem; color: var(--text-muted);">
+                  Method: {{ order['payment_method'] }}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 4rem 2rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+        <p style="color: var(--text-muted); font-size: 1.1rem;">No customer orders placed yet.</p>
+      </div>
+    {% endif %}
+  </main>
+
+</body>
+</html>

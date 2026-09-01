@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About CHROMANEST — Art that tells your story</title>
+  <meta name="description" content="CHROMANEST is an art store started in 2025, created with a love for creativity, handmade art, and unique pieces.">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- =========================================================================
+       SITE HEADER / NAVIGATION
+       ========================================================================= -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <span class="logo-text">CHROMANEST</span>
+        <span class="logo-tagline">Art that tells your story</span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/shop" class="nav-link">Shop</a>
+        <a href="/shop?category=Paintings" class="nav-link">Paintings</a>
+        <a href="/shop?category=Resin%20Art" class="nav-link">Resin Art</a>
+        <a href="/shop?category=Wall%20Art" class="nav-link">Wall Art</a>
+        <a href="/about" class="nav-link active">About</a>
+        <a href="/contact" class="nav-link">Contact</a>
+      </nav>
+
+            <div class="nav-actions">
+        <!-- Wishlist Icon Trigger -->
+        <button class="nav-action-btn open-wishlist-trigger" aria-label="Open Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-count-badge" style="display: none;">0</span>
+        </button>
+
+        <!-- Cart Icon Link -->
+        <a href="/cart" class="nav-action-btn" aria-label="Shopping Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+
+        <!-- User Authentication State -->
+        {% if current_user %}
+          {% if current_user['role'] == 'admin' %}
+            <a href="/admin" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+              <i class="fas fa-shield-alt"></i> Admin
+            </a>
+          {% else %}
+            <a href="/profile" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;" title="My Profile">
+              <i class="fas fa-user-circle"></i> {{ current_user['name'].split()[0] }}
+            </a>
+            <a href="/orders" class="nav-action-btn" title="My Orders" aria-label="My Orders">
+              <i class="fas fa-box-open"></i>
+            </a>
+          {% endif %}
+          <a href="/logout" class="nav-action-btn" title="Log Out" aria-label="Log Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        {% else %}
+          <a href="/login" class="btn btn-secondary btn-sm" style="font-weight: 600;">Log In</a>
+          <a href="/signup" class="btn btn-primary btn-sm" style="font-weight: 600;">Sign Up</a>
+        {% endif %}
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-toggle" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       ABOUT HERO
+       ========================================================================= -->
+  <div class="about-hero-section" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); border-bottom: 1px solid var(--border-color); padding: 5rem 0 4rem 0; text-align: center;">
+    <div class="container">
+      <span class="section-tag">About CHROMANEST</span>
+      <h1 class="section-title" style="font-size: clamp(2.4rem, 5vw, 3.6rem); margin-bottom: 1rem; font-style: italic;">
+        "Art that tells your story."
+      </h1>
+      <p class="section-subtitle" style="max-width: 680px; margin: 0 auto; font-size: 1.15rem; line-height: 1.7;">
+        An art store started in 2025, created with a love for creativity, handmade art, and unique pieces.
+      </p>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       BRAND STORY
+       ========================================================================= -->
+  <main class="container section-padding">
+    <div class="about-intro-grid" style="align-items: center; margin-bottom: 5.5rem;">
+      <div class="about-img-frame">
+        <img src="{{ url_for('static', filename='images/about-artist.jpg') }}" alt="CHROMANEST Creative Studio">
+      </div>
+      <div>
+        <span class="section-tag">Started in 2025</span>
+        <h2 class="section-title" style="font-size: 2.4rem; margin-bottom: 1.4rem;">Creativity & Handmade Art</h2>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.4rem;">
+          CHROMANEST is an art store started in 2025, created with a love for creativity, handmade art, and unique pieces.
+        </p>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
+          The store brings together different forms of art and handmade creations, giving people a place to discover pieces that add personality and creativity to their spaces.
+        </p>
+        <div>
+          <a href="/shop" class="btn btn-primary btn-lg">
+            Explore All Artworks <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         WHAT YOU'LL FIND
+         ========================================================================= -->
+    <div style="margin: 5.5rem 0;">
+      <div class="section-header">
+        <span class="section-tag">Our Collection</span>
+        <h2 class="section-title">What You'll Find</h2>
+        <p class="section-subtitle">
+          Discover a curated variety of artistic mediums and handcrafted pieces.
+        </p>
+      </div>
+
+      <div class="categories-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem;">
+        <a href="/shop?category=Paintings" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h3 class="category-title">Paintings</h3>
+          <span class="category-count">Original Art</span>
+        </a>
+
+        <a href="/shop?category=Resin%20Art" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h3 class="category-title">Resin Art</h3>
+          <span class="category-count">Geodes, Trays & Coasters</span>
+        </a>
+
+        <a href="/shop?category=Wall%20Art" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3 class="category-title">Wall Art</h3>
+          <span class="category-count">Textured & Minimalist</span>
+        </a>
+
+        <a href="/shop?category=Handmade" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <h3 class="category-title">Handmade Creations</h3>
+          <span class="category-count">Ceramics & Fiber Art</span>
+        </a>
+
+        <a href="/shop?category=Art%20Prints" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-image"></i>
+          </div>
+          <h3 class="category-title">Art Prints</h3>
+          <span class="category-count">Fine Art Prints</span>
+        </a>
+
+        <a href="/shop?category=Customized%20Gifts" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-gift"></i>
+          </div>
+          <h3 class="category-title">Customized Gifts</h3>
+          <span class="category-count">Personalized Art</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         OUR IDEA
+         ========================================================================= -->
+    <div style="margin: 5.5rem 0; padding: 4rem 2.5rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+      <div style="max-width: 780px; margin: 0 auto; text-align: center;">
+        <span class="section-tag">Our Vision</span>
+        <h2 class="section-title" style="font-size: 2.3rem; margin-bottom: 1.5rem;">Our Idea</h2>
+        <p style="font-size: 1.25rem; color: var(--text-primary); line-height: 1.8; margin-bottom: 1.6rem; font-family: var(--font-serif); font-style: italic;">
+          "We believe art doesn't have to be complicated to be meaningful. Every piece can bring a different feeling, memory, or personality into a space."
+        </p>
+        <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2.2rem;">
+          CHROMANEST is created as a place to explore and appreciate creative work while making unique art accessible to people who love it.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/shop" class="btn btn-primary btn-lg">Browse Collection</a>
+          <a href="/contact" class="btn btn-secondary btn-lg">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="logo">
+          <span class="logo-text">CHROMANEST</span>
+          <span class="logo-tagline" style="color: var(--accent-mauve);">Art that tells your story</span>
+        </a>
+        <p>
+          An art store started in 2025, created with a love for creativity, handmade art, and unique pieces.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Collection</h4>
+        <div class="footer-links">
+          <a href="/shop?category=Paintings">Paintings</a>
+          <a href="/shop?category=Resin%20Art">Resin Art</a>
+          <a href="/shop?category=Wall%20Art">Wall Art</a>
+          <a href="/shop?category=Handmade">Handmade Creations</a>
+          <a href="/shop?category=Art%20Prints">Art Prints</a>
+          <a href="/shop?category=Customized%20Gifts">Customized Gifts</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <div class="footer-links">
+          <a href="/about">About CHROMANEST</a>
+          <a href="/shop">Shop All Artworks</a>
+          <a href="/contact">Contact & Inquiries</a>
+          <a href="/cart">Shopping Bag</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact & Inquiries</h4>
+        <ul class="footer-contact-info">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <span>contact@chromanest.com</span>
+          </li>
+          <li>
+            <i class="fas fa-sparkles"></i>
+            <span>Art Store • Est. 2025</span>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Online Inquiries: Mon – Fri</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2025 CHROMANEST. All rights reserved.</div>
+      <div>Art that tells your story.</div>
+    </div>
+  </footer>
+
+  <!-- Wishlist Drawer -->
+  <div id="wishlist-drawer-overlay" class="drawer-overlay"></div>
+  <div id="wishlist-drawer-panel" class="drawer-panel">
+    <div class="drawer-header">
+      <h3 class="drawer-title"><i class="far fa-heart" style="color: var(--accent-lavender-dark);"></i> Saved Artworks</h3>
+      <button id="close-wishlist-drawer" class="drawer-close-btn" aria-label="Close Wishlist Drawer">&times;</button>
+    </div>
+    <div id="wishlist-drawer-items" class="drawer-body"></div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

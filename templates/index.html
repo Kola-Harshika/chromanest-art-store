@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHROMANEST — Art that tells your story</title>
+  <meta name="description" content="CHROMANEST is a modern art boutique featuring original paintings, handcrafted resin art, textured wall art, ceramic sculptures, and fine art prints.">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- =========================================================================
+       SITE HEADER / NAVIGATION
+       ========================================================================= -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        <span class="logo-text">CHROMANEST</span>
+        <span class="logo-tagline">Art that tells your story</span>
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <nav class="nav-menu">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/shop" class="nav-link">Shop</a>
+        <a href="/shop?category=Paintings" class="nav-link">Paintings</a>
+        <a href="/shop?category=Resin%20Art" class="nav-link">Resin Art</a>
+        <a href="/shop?category=Wall%20Art" class="nav-link">Wall Art</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/contact" class="nav-link">Contact</a>
+      </nav>
+
+      <!-- Nav Actions -->
+            <div class="nav-actions">
+        <!-- Wishlist Icon Trigger -->
+        <button class="nav-action-btn open-wishlist-trigger" aria-label="Open Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-count-badge" style="display: none;">0</span>
+        </button>
+
+        <!-- Cart Icon Link -->
+        <a href="/cart" class="nav-action-btn" aria-label="Shopping Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+
+        <!-- User Authentication State -->
+        {% if current_user %}
+          {% if current_user['role'] == 'admin' %}
+            <a href="/admin" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+              <i class="fas fa-shield-alt"></i> Admin
+            </a>
+          {% else %}
+            <a href="/profile" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;" title="My Profile">
+              <i class="fas fa-user-circle"></i> {{ current_user['name'].split()[0] }}
+            </a>
+            <a href="/orders" class="nav-action-btn" title="My Orders" aria-label="My Orders">
+              <i class="fas fa-box-open"></i>
+            </a>
+          {% endif %}
+          <a href="/logout" class="nav-action-btn" title="Log Out" aria-label="Log Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        {% else %}
+          <a href="/login" class="btn btn-secondary btn-sm" style="font-weight: 600;">Log In</a>
+          <a href="/signup" class="btn btn-primary btn-sm" style="font-weight: 600;">Sign Up</a>
+        {% endif %}
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-toggle" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       HERO SECTION
+       ========================================================================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-gem"></i> Curated Contemporary Atelier
+        </div>
+        <h1 class="hero-title">
+          Art that tells <span>your story.</span>
+        </h1>
+        <p class="hero-text">
+          Step into a world of bespoke handcrafted paintings, crystal resin compositions, sculptural ceramics, and archival fine prints designed to breathe soul and elegance into your living space.
+        </p>
+        <div class="hero-cta">
+          <a href="/shop" class="btn btn-primary btn-lg">
+            Explore Collection <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="/about" class="btn btn-secondary btn-lg">
+            Meet the Artist
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h4>Est. 2025</h4>
+            <p>Art Store</p>
+          </div>
+          <div class="stat-item">
+            <h4>Original</h4>
+            <p>Handmade Art</p>
+          </div>
+          <div class="stat-item">
+            <h4>Curated</h4>
+            <p>Unique Pieces</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-frame">
+          <img src="{{ url_for('static', filename='images/hero-art.jpg') }}" alt="Featured Artwork - CHROMANEST Atelier" onerror="this.src='/static/images/hero-art.jpg'">
+          <div class="hero-floating-card">
+            <div class="floating-icon">
+              <i class="fas fa-palette"></i>
+            </div>
+            <div class="floating-text">
+              <h5>Curator's Spotlight</h5>
+              <p>Ethereal Reverie • Oil & 24K Leaf</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       POPULAR CATEGORIES
+       ========================================================================= -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Explore Mediums</span>
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">
+          From luminous multidimensional resin to tactile textured wall pieces, find the perfect medium to harmonize with your interior.
+        </p>
+      </div>
+
+      <div class="categories-grid">
+        <a href="/shop?category=Paintings" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h3 class="category-title">Paintings</h3>
+          <span class="category-count">Oil & Acrylic</span>
+        </a>
+
+        <a href="/shop?category=Resin%20Art" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h3 class="category-title">Resin Art</h3>
+          <span class="category-count">Geodes & Trays</span>
+        </a>
+
+        <a href="/shop?category=Wall%20Art" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3 class="category-title">Wall Art</h3>
+          <span class="category-count">3D & Plaster Relifs</span>
+        </a>
+
+        <a href="/shop?category=Handmade" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <h3 class="category-title">Handmade</h3>
+          <span class="category-count">Ceramics & Fiber</span>
+        </a>
+
+        <a href="/shop?category=Art%20Prints" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-image"></i>
+          </div>
+          <h3 class="category-title">Art Prints</h3>
+          <span class="category-count">Archival Giclées</span>
+        </a>
+
+        <a href="/shop?category=Customized%20Gifts" class="category-card">
+          <div class="category-icon-wrapper">
+            <i class="fas fa-gift"></i>
+          </div>
+          <h3 class="category-title">Customized Gifts</h3>
+          <span class="category-count">Personalized Art</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FEATURED ARTWORKS
+       ========================================================================= -->
+  <section class="section-padding" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Featured Masterpieces</span>
+        <h2 class="section-title">Curated for Discerning Spaces</h2>
+        <p class="section-subtitle">
+          Explore our most coveted original works and limited studio editions, each complete with a signed certificate of authenticity.
+        </p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <span class="product-badge">Curator's Pick</span>
+            <button class="product-wishlist-btn" data-wishlist-id="paint-01" onclick="toggleWishlist('paint-01')" aria-label="Save to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <a href="/product?id=paint-01">
+              <img src="{{ url_for('static', filename='images/ethereal-whispers.jpg') }}" alt="Ethereal Whispers" loading="lazy">
+            </a>
+            <div class="product-quick-actions">
+              <a href="/product?id=paint-01" class="btn btn-secondary btn-sm">Details</a>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('paint-01', 1)">+ Add to Bag</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-category">Paintings</div>
+            <h3 class="product-title"><a href="/product?id=paint-01">Ethereal Whispers</a></h3>
+            <div class="product-medium">Oil & 24K Gold Leaf on Linen</div>
+            <div class="product-meta-row">
+              <div class="product-price">$280 <span class="product-price-old">$320</span></div>
+              <div class="product-rating"><i class="fas fa-star"></i> <span>4.9 (24)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <span class="product-badge gold">Bestseller</span>
+            <button class="product-wishlist-btn" data-wishlist-id="resin-01" onclick="toggleWishlist('resin-01')" aria-label="Save to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <a href="/product?id=resin-01">
+              <img src="{{ url_for('static', filename='images/oceanic-geode.jpg') }}" alt="Oceanic Geode Flow" loading="lazy">
+            </a>
+            <div class="product-quick-actions">
+              <a href="/product?id=resin-01" class="btn btn-secondary btn-sm">Details</a>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('resin-01', 1)">+ Add to Bag</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-category">Resin Art</div>
+            <h3 class="product-title"><a href="/product?id=resin-01">Oceanic Geode Flow</a></h3>
+            <div class="product-medium">Epoxy Resin, Quartz & Sea Pigments</div>
+            <div class="product-meta-row">
+              <div class="product-price">$195 <span class="product-price-old">$230</span></div>
+              <div class="product-rating"><i class="fas fa-star"></i> <span>4.9 (31)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <span class="product-badge terracotta">Trending</span>
+            <button class="product-wishlist-btn" data-wishlist-id="wall-01" onclick="toggleWishlist('wall-01')" aria-label="Save to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <a href="/product?id=wall-01">
+              <img src="{{ url_for('static', filename='images/textured-terracotta.jpg') }}" alt="Textured Terracotta Arcs" loading="lazy">
+            </a>
+            <div class="product-quick-actions">
+              <a href="/product?id=wall-01" class="btn btn-secondary btn-sm">Details</a>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('wall-01', 1)">+ Add to Bag</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-category">Wall Art</div>
+            <h3 class="product-title"><a href="/product?id=wall-01">Textured Terracotta Arcs</a></h3>
+            <div class="product-medium">3D Plaster & Mineral Earth Wash</div>
+            <div class="product-meta-row">
+              <div class="product-price">$240 <span class="product-price-old">$280</span></div>
+              <div class="product-rating"><i class="fas fa-star"></i> <span>5.0 (27)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <span class="product-badge">Studio Exclusive</span>
+            <button class="product-wishlist-btn" data-wishlist-id="hand-01" onclick="toggleWishlist('hand-01')" aria-label="Save to Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+            <a href="/product?id=hand-01">
+              <img src="{{ url_for('static', filename='images/sculpted-clay-vase.jpg') }}" alt="Sculpted Clay Muse Vase" loading="lazy">
+            </a>
+            <div class="product-quick-actions">
+              <a href="/product?id=hand-01" class="btn btn-secondary btn-sm">Details</a>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('hand-01', 1)">+ Add to Bag</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-category">Handmade</div>
+            <h3 class="product-title"><a href="/product?id=hand-01">Sculpted Clay Muse Vase</a></h3>
+            <div class="product-medium">Wheel-Thrown Stoneware Ceramic</div>
+            <div class="product-meta-row">
+              <div class="product-price">$135 <span class="product-price-old">$155</span></div>
+              <div class="product-rating"><i class="fas fa-star"></i> <span>4.9 (38)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3.5rem;">
+        <a href="/shop" class="btn btn-primary btn-lg">
+          View All 18 Gallery Artworks <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       WHY CHOOSE CHROMANEST (VALUE PROPOSITIONS)
+       ========================================================================= -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The CHROMANEST Standard</span>
+        <h2 class="section-title">Crafted with Uncompromising Care</h2>
+        <p class="section-subtitle">
+          We honor traditional atelier craftsmanship while delivering a modern, seamless fine art collecting experience.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h3 class="feature-title">Authenticity Certified</h3>
+          <p class="feature-desc">Every piece arrives with an official embossed Certificate of Authenticity signed by the resident artist.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i class="fas fa-hands"></i>
+          </div>
+          <h3 class="feature-title">Handcrafted Mastery</h3>
+          <p class="feature-desc">Never mass-produced. Each canvas, resin pour, and sculpted ceramic is individually crafted in small studio batches.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <h3 class="feature-title">Museum Transit Packaging</h3>
+          <p class="feature-desc">Encased in acid-free glassine and custom wooden shockproof crates with 100% insured transit guarantee.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-box">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3 class="feature-title">Mindful Materials</h3>
+          <p class="feature-desc">Sustainably harvested timber stretcher bars, non-toxic eco-resins, and 100% organic cotton rag papers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       BRAND STORY & VISION BANNER
+       ========================================================================= -->
+  <section class="section-padding" style="padding-top: 0;">
+    <div class="container">
+      <div class="artist-banner">
+        <div class="artist-banner-grid">
+          <div class="artist-banner-img">
+            <img src="{{ url_for('static', filename='images/about-artist.jpg') }}" alt="CHROMANEST Creative Studio" loading="lazy">
+          </div>
+          <div class="artist-banner-text">
+            <span class="section-tag">Our Vision</span>
+            <h2 class="section-title" style="font-size: 2.2rem;">Art That Tells Your Story</h2>
+            <p class="artist-quote">
+              "We believe art doesn't have to be complicated to be meaningful. Every piece can bring a different feeling, memory, or personality into a space."
+            </p>
+            <p style="margin-bottom: 2rem; color: var(--text-secondary); line-height: 1.7;">
+              CHROMANEST is an art store started in 2025, created with a love for creativity, handmade art, and unique pieces. The store brings together different forms of art and handmade creations, giving people a place to discover pieces that add personality and creativity to their spaces.
+            </p>
+            <a href="/about" class="btn btn-secondary">
+              Learn More About Us <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CUSTOMER TESTIMONIALS
+       ========================================================================= -->
+  <section class="section-padding" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Collector Stories</span>
+        <h2 class="section-title">Loved in Homes Worldwide</h2>
+        <p class="section-subtitle">
+          Read what art enthusiasts, interior designers, and collectors say about their CHROMANEST acquisitions.
+        </p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-quote">
+            "The depth of the gold leaf in 'Ethereal Whispers' is breathtaking. In morning light it glows warm peach, and by evening it looks deep and mysterious. Truly a centerpiece."
+          </p>
+          <div class="testimonial-author">
+            <img src="{{ url_for('static', filename='images/testimonial-1.jpg') }}" alt="Elena Rostova" class="author-avatar">
+            <div>
+              <div class="author-name">Elena Rostova</div>
+              <div class="author-role">Art Collector, Geneva</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-quote">
+            "As an interior designer, I source art for luxury residences. CHROMANEST consistently exceeds expectations in both aesthetic depth and packaging excellence."
+          </p>
+          <div class="testimonial-author">
+            <img src="{{ url_for('static', filename='images/testimonial-2.jpg') }}" alt="Marcus Vance" class="author-avatar">
+            <div>
+              <div class="author-name">Marcus Vance</div>
+              <div class="author-role">Principal Designer, London</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="testimonial-quote">
+            "The Oceanic Geode resin piece looks like a frozen slice of the deep sea. The quartz clusters sparkle naturally and the finish is impeccably mirror-like."
+          </p>
+          <div class="testimonial-author">
+            <img src="{{ url_for('static', filename='images/testimonial-3.jpg') }}" alt="Aria Tanaka" class="author-avatar">
+            <div>
+              <div class="author-name">Aria Tanaka</div>
+              <div class="author-role">Curator, Kyoto</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       NEWSLETTER SECTION
+       ========================================================================= -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="newsletter-section">
+        <div class="newsletter-content">
+          <span class="section-tag" style="background: rgba(255,255,255,0.15); color: #FAF7F2;">Private Collector Circle</span>
+          <h2>Join the Atelier Gazette</h2>
+          <p>
+            Receive exclusive previews of newly released originals, invitations to private studio drops, and thoughtful essays on living with art.
+          </p>
+          <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address..." required>
+            <button type="submit" class="btn btn-accent">Subscribe</button>
+          </form>
+          <p class="newsletter-note">
+            We value your privacy. Unsubscribe at any time with a single click.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="logo">
+          <span class="logo-text">CHROMANEST</span>
+          <span class="logo-tagline" style="color: var(--accent-mauve);">Art that tells your story</span>
+        </a>
+        <p>
+          An art store started in 2025, created with a love for creativity, handmade art, and unique pieces.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Collection</h4>
+        <div class="footer-links">
+          <a href="/shop?category=Paintings">Paintings</a>
+          <a href="/shop?category=Resin%20Art">Resin Art</a>
+          <a href="/shop?category=Wall%20Art">Wall Art</a>
+          <a href="/shop?category=Handmade">Handmade Creations</a>
+          <a href="/shop?category=Art%20Prints">Art Prints</a>
+          <a href="/shop?category=Customized%20Gifts">Customized Gifts</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <div class="footer-links">
+          <a href="/about">About CHROMANEST</a>
+          <a href="/shop">Shop All Artworks</a>
+          <a href="/contact">Contact & Inquiries</a>
+          <a href="/cart">Shopping Bag</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact & Inquiries</h4>
+        <ul class="footer-contact-info">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <span>contact@chromanest.com</span>
+          </li>
+          <li>
+            <i class="fas fa-sparkles"></i>
+            <span>Art Store • Est. 2025</span>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Online Inquiries: Mon – Fri</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2025 CHROMANEST. All rights reserved.</div>
+      <div>Art that tells your story.</div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       WISHLIST DRAWER (SLIDE-OVER PANEL)
+       ========================================================================= -->
+  <div id="wishlist-drawer-overlay" class="drawer-overlay"></div>
+  <div id="wishlist-drawer-panel" class="drawer-panel">
+    <div class="drawer-header">
+      <h3 class="drawer-title"><i class="far fa-heart" style="color: var(--accent-lavender-dark);"></i> Saved Artworks</h3>
+      <button id="close-wishlist-drawer" class="drawer-close-btn" aria-label="Close Wishlist Drawer">&times;</button>
+    </div>
+    <div id="wishlist-drawer-items" class="drawer-body">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

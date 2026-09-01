@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Inquiries — CHROMANEST Modern Art Store</title>
+  <meta name="description" content="Get in touch with CHROMANEST Atelier for custom art commissions, gallery consultations, framing inquiries, or collector support.">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- =========================================================================
+       SITE HEADER / NAVIGATION
+       ========================================================================= -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <span class="logo-text">CHROMANEST</span>
+        <span class="logo-tagline">Art that tells your story</span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/shop" class="nav-link">Shop</a>
+        <a href="/shop?category=Paintings" class="nav-link">Paintings</a>
+        <a href="/shop?category=Resin%20Art" class="nav-link">Resin Art</a>
+        <a href="/shop?category=Wall%20Art" class="nav-link">Wall Art</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/contact" class="nav-link active">Contact</a>
+      </nav>
+
+            <div class="nav-actions">
+        <!-- Wishlist Icon Trigger -->
+        <button class="nav-action-btn open-wishlist-trigger" aria-label="Open Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="badge-count wishlist-count-badge" style="display: none;">0</span>
+        </button>
+
+        <!-- Cart Icon Link -->
+        <a href="/cart" class="nav-action-btn" aria-label="Shopping Cart">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="badge-count cart-count-badge" style="display: none;">0</span>
+        </a>
+
+        <!-- User Authentication State -->
+        {% if current_user %}
+          {% if current_user['role'] == 'admin' %}
+            <a href="/admin" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+              <i class="fas fa-shield-alt"></i> Admin
+            </a>
+          {% else %}
+            <a href="/profile" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;" title="My Profile">
+              <i class="fas fa-user-circle"></i> {{ current_user['name'].split()[0] }}
+            </a>
+            <a href="/orders" class="nav-action-btn" title="My Orders" aria-label="My Orders">
+              <i class="fas fa-box-open"></i>
+            </a>
+          {% endif %}
+          <a href="/logout" class="nav-action-btn" title="Log Out" aria-label="Log Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        {% else %}
+          <a href="/login" class="btn btn-secondary btn-sm" style="font-weight: 600;">Log In</a>
+          <a href="/signup" class="btn btn-primary btn-sm" style="font-weight: 600;">Sign Up</a>
+        {% endif %}
+
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-toggle" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       CONTACT BANNER
+       ========================================================================= -->
+  <div class="shop-header-banner">
+    <div class="container">
+      <span class="section-tag">Get in Touch</span>
+      <h1 class="section-title" style="font-size: 3rem; margin-bottom: 0.8rem;">Connect With The Atelier</h1>
+      <p class="section-subtitle" style="max-width: 600px; margin: 0 auto;">
+        Whether you are seeking a private studio visit, a bespoke commissioned artwork, or guidance on curation, we would love to hear from you.
+      </p>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       CONTACT MAIN SECTION & FORM
+       ========================================================================= -->
+  <main class="container section-padding">
+    <div class="contact-grid">
+      
+      <!-- Studio Info Card -->
+      <div class="contact-info-card">
+        <span class="section-tag" style="margin-bottom: 1.5rem;">Atelier Details</span>
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem;">We're Here to Assist Your Art Journey</h2>
+        
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope-open-text"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-family: var(--font-sans); font-weight: 700; margin-bottom: 2px;">Email Inquiries</h4>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">contact@chromanest.com</p>
+          </div>
+        </div>
+
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <i class="fas fa-sparkles"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-family: var(--font-sans); font-weight: 700; margin-bottom: 2px;">About the Store</h4>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">Started in 2025 with a love for creativity, handmade art, and unique pieces.</p>
+          </div>
+        </div>
+
+        <div class="contact-info-item">
+          <div class="contact-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-family: var(--font-sans); font-weight: 700; margin-bottom: 2px;">Inquiry Hours</h4>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">Monday – Friday<br>Online Response within 24 Hours</p>
+          </div>
+        </div>
+
+        <!-- Social Media Links -->
+        <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1rem;">
+          <h4 style="font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Follow Our Daily Studio Journal</h4>
+          <div class="footer-socials">
+            <a href="#" class="social-link" style="background: var(--bg-secondary); color: var(--text-primary);" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link" style="background: var(--bg-secondary); color: var(--text-primary);" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+            <a href="#" class="social-link" style="background: var(--bg-secondary); color: var(--text-primary);" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" style="background: var(--bg-secondary); color: var(--text-primary);" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact / Commission Form Card -->
+      <div class="contact-form-card">
+        <span class="section-tag" style="margin-bottom: 1rem;">Send a Message</span>
+        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Inquire or Commission</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+          Please complete the form below. We typically respond within one business day with detailed consultation details.
+        </p>
+
+        <form id="contact-form">
+          <div class="form-group">
+            <label for="contact-name" class="form-label">Your Name <span style="color: var(--accent-terracotta);">*</span></label>
+            <input type="text" id="contact-name" class="form-control" placeholder="e.g. Eleanor Vance" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label">Email Address <span style="color: var(--accent-terracotta);">*</span></label>
+            <input type="email" id="contact-email" class="form-control" placeholder="e.g. eleanor@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject" class="form-label">Inquiry Type</label>
+            <select id="contact-subject" class="form-control custom-select">
+              <option value="General Inquiry">General Inquiries & Acquisition</option>
+              <option value="Custom Commission">Custom Artwork Commission</option>
+              <option value="Framing & Sizing">Custom Sizing & Framing Guidance</option>
+              <option value="Interior Design Trade">Interior Design & Trade Program</option>
+              <option value="Shipping & Logistics">Shipping & Order Status</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message" class="form-label">Your Message <span style="color: var(--accent-terracotta);">*</span></label>
+            <textarea id="contact-message" class="form-control" placeholder="Tell us about your space, dimensions, or specific questions..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            <i class="fas fa-paper-plane"></i> Send Message to Atelier
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         FREQUENTLY ASKED QUESTIONS (ACCORDION)
+         ========================================================================= -->
+    <div id="faq" class="faq-section">
+      <div class="section-header">
+        <span class="section-tag">Collector Inquiries</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Common questions regarding original artworks, packaging, custom orders, and framing.</p>
+      </div>
+
+      <div class="accordion-item active">
+        <div class="accordion-header">
+          <span>Are the artworks original or reproductions?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="accordion-body">
+          All pieces in our Paintings, Resin Art, Wall Art, and Handmade categories are 100% original, one-of-a-kind studio creations. Each comes with a signed and embossed Certificate of Authenticity. Our Art Prints are limited archival museum-grade reproductions strictly capped and numbered.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span>How are fragile artworks packaged and insured for shipping?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="accordion-body">
+          We use custom shockproof wooden crates and acid-free archival wrapping materials engineered specifically for fine art transport. Every shipment is fully insured for its full appraisal value via premium air couriers with real-time tracking.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span>Can I commission an artwork with specific dimensions or color palettes?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="accordion-body">
+          Yes! We frequently collaborate with private collectors and interior designers on custom commissions. Simply select "Custom Artwork Commission" in the form above and include your desired size and color moodboard. We provide color sketches for your approval before starting.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span>What is your return and satisfaction policy?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="accordion-body">
+          We want you to feel complete harmony with your artwork. If you are not delighted with your purchase, you may initiate a return within 14 days of receipt for a full refund or studio exchange.
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          <span>Do you offer trade discounts for interior designers and architects?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="accordion-body">
+          Yes, our Trade & Hospitality Program provides exclusive tier discounts, complimentary swatch samples, and priority commissions for certified interior designers, staging firms, and architects.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col footer-brand">
+        <a href="/" class="logo">
+          <span class="logo-text">CHROMANEST</span>
+          <span class="logo-tagline" style="color: var(--accent-mauve);">Art that tells your story</span>
+        </a>
+        <p>
+          An art store started in 2025, created with a love for creativity, handmade art, and unique pieces.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Collection</h4>
+        <div class="footer-links">
+          <a href="/shop?category=Paintings">Paintings</a>
+          <a href="/shop?category=Resin%20Art">Resin Art</a>
+          <a href="/shop?category=Wall%20Art">Wall Art</a>
+          <a href="/shop?category=Handmade">Handmade Creations</a>
+          <a href="/shop?category=Art%20Prints">Art Prints</a>
+          <a href="/shop?category=Customized%20Gifts">Customized Gifts</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <div class="footer-links">
+          <a href="/about">About CHROMANEST</a>
+          <a href="/shop">Shop All Artworks</a>
+          <a href="/contact">Contact & Inquiries</a>
+          <a href="/cart">Shopping Bag</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact & Inquiries</h4>
+        <ul class="footer-contact-info">
+          <li>
+            <i class="fas fa-envelope"></i>
+            <span>contact@chromanest.com</span>
+          </li>
+          <li>
+            <i class="fas fa-sparkles"></i>
+            <span>Art Store • Est. 2025</span>
+          </li>
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Online Inquiries: Mon – Fri</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>&copy; 2025 CHROMANEST. All rights reserved.</div>
+      <div>Art that tells your story.</div>
+    </div>
+  </footer>
+
+  <!-- Wishlist Drawer -->
+  <div id="wishlist-drawer-overlay" class="drawer-overlay"></div>
+  <div id="wishlist-drawer-panel" class="drawer-panel">
+    <div class="drawer-header">
+      <h3 class="drawer-title"><i class="far fa-heart" style="color: var(--accent-lavender-dark);"></i> Saved Artworks</h3>
+      <button id="close-wishlist-drawer" class="drawer-close-btn" aria-label="Close Wishlist Drawer">&times;</button>
+    </div>
+    <div id="wishlist-drawer-items" class="drawer-body"></div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
